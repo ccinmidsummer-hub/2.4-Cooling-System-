@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>2.4 Cooling System 精读可视化讲义（双语互动版）</title>
+<style>
+  :root{
+    --bg1:#f4f7ff;--bg2:#eef4ff;--card:rgba(255,255,255,.92);--line:#dce4ff;
+    --primary:#3559c7;--primary2:#6f63ff;--text:#1f2a44;--muted:#5b6a8f;--shadow:0 14px 36px rgba(53,89,199,.14);
+    --radius:22px;--en-font:Georgia,"Times New Roman",serif;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;font-family:"Segoe UI","PingFang SC","Microsoft YaHei",Arial,sans-serif;color:var(--text);
+    background:radial-gradient(circle at top left,#fff 0,transparent 28%),radial-gradient(circle at bottom right,#dfe8ff 0,transparent 28%),linear-gradient(135deg,var(--bg1),var(--bg2));
+    line-height:1.6;
+  }
+  .app{width:min(1520px,95vw);margin:18px auto 28px;display:grid;gap:16px}
+  .panel{background:var(--card);border:1px solid rgba(255,255,255,.8);box-shadow:var(--shadow);border-radius:var(--radius);backdrop-filter:blur(8px)}
+  .hero{padding:24px 28px;position:relative;overflow:hidden}
+  .hero:after{content:"";position:absolute;right:-36px;top:-44px;width:180px;height:180px;background:radial-gradient(circle,rgba(111,99,255,.18),transparent 72%)}
+  h1{margin:0 0 6px;font-size:clamp(2rem,3.7vw,3rem);line-height:1.15;color:#2947a5}
+  .subtitle{color:var(--muted);font-size:1.02rem;max-width:82ch;margin-bottom:14px}
+  .badge-row,.mini-row,.tag-row{display:flex;flex-wrap:wrap;gap:10px}
+  .badge,.tag,.mini{padding:8px 14px;border-radius:999px;font-weight:800;font-size:.93rem;background:rgba(92,124,255,.1);border:1px solid rgba(92,124,255,.18);color:#28439f}
+  .tag{background:#fff7ec;border-color:#f5d6ae;color:#9a5e18}
+  .layout{display:grid;grid-template-columns:310px minmax(0,1fr);gap:16px;align-items:start}
+  .side{position:sticky;top:14px;display:grid;gap:16px}
+  .side-card{padding:16px 16px 18px}
+  .side-title{margin:0 0 10px;font-size:1.02rem;color:#2e4dae}
+  .toc{display:grid;gap:8px}
+  .toc a{text-decoration:none;color:#2947a5;font-weight:700;font-size:.95rem;padding:10px 12px;border-radius:14px;background:#f5f8ff;border:1px solid #e2e9ff}
+  .toc a:hover{background:#edf3ff}
+  .control-box{display:grid;gap:12px}
+  label.control{display:grid;gap:6px;color:#35509c;font-weight:800;font-size:.92rem}
+  select,input[type=range]{width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px}
+  .live-note{font-size:.88rem;color:var(--muted);line-height:1.65}
+  .main{display:grid;gap:16px}
+  .section{padding:20px 22px}
+  .section h2{margin:0 0 6px;font-size:1.55rem;color:#2e4dae}
+  .section p.lead{margin:0;color:var(--muted)}
+  .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:16px}
+  .card{background:linear-gradient(180deg,#fff,#f6f9ff);border:1px solid #e1e8ff;border-radius:20px;padding:16px}
+  .card h3{margin:0 0 8px;font-size:1.05rem;color:#2947a5}
+  .small{color:var(--muted);font-size:.93rem}
+  .tree{display:grid;gap:12px;margin-top:16px}
+  .tree-item{border:1px solid #e1e8ff;border-radius:18px;background:#fff;padding:14px 14px 10px}
+  .tree-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
+  .tree-head strong{font-size:1.03rem;color:#2947a5}
+  .pill{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#eef3ff;border:1px solid #dbe4ff;color:#4963ab;font-weight:800;font-size:.84rem}
+  .branch{display:flex;flex-wrap:wrap;gap:8px}
+  .branch span{padding:8px 12px;border-radius:999px;background:#f7f9ff;border:1px solid #e5ebff;font-weight:700;color:#35509c;font-size:.9rem}
+  .flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:18px}
+  .step{position:relative;padding:16px;border-radius:22px;background:linear-gradient(180deg,#fff,#f4f8ff);border:1px solid #e1e8ff;min-height:220px}
+  .step:not(:last-child)::after{content:"→";position:absolute;right:-13px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#4563d8,#7c67ff);color:#fff;font-weight:900;box-shadow:0 10px 20px rgba(69,99,216,.18)}
+  .step-no{display:inline-flex;padding:6px 10px;border-radius:999px;background:#eef3ff;color:#35509c;font-weight:900;font-size:.82rem}
+  .step h3{margin:10px 0 8px;color:#27439c}
+  .step ul{margin:0;padding-left:18px}
+  .compare{width:100%;border-collapse:collapse;margin-top:16px;font-size:.96rem;background:#fff;border-radius:18px;overflow:hidden}
+  .compare th,.compare td{padding:12px 12px;border:1px solid #e7edff;vertical-align:top}
+  .compare th{background:#eef4ff;color:#35509c;text-align:left}
+  .diagram{display:grid;gap:10px;margin-top:16px}
+  .group{border:1px solid #dde6ff;border-radius:18px;background:#fff;padding:14px}
+  .group-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .group-title strong{color:#2947a5;font-size:1.02rem}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chips span{padding:8px 12px;border-radius:999px;background:#f4f7ff;border:1px solid #e2e9ff;color:#445fa9;font-weight:700;font-size:.9rem}
+  .chain{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-top:16px}
+  .chain-item{position:relative;text-align:center;padding:16px 12px;border-radius:20px;background:#fff;border:1px solid #e2e9ff;font-weight:800;color:#2947a5;min-height:120px;display:grid;place-items:center}
+  .chain-item:not(:last-child)::after{content:"→";position:absolute;right:-12px;top:50%;transform:translateY(-50%);width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#edf2ff;border:1px solid #dbe4ff;color:#4c63a6;font-weight:900}
+  .sentence-card{border:1px solid #e1e8ff;border-radius:22px;background:#fff;padding:16px;margin-top:14px}
+  .sentence-card h3{margin:0 0 10px;color:#2947a5}
+  .original{font-size:1.03rem;font-weight:700;color:#23345a;background:#f7faff;border:1px solid #e7edff;padding:12px 14px;border-radius:16px;font-family:var(--en-font)}
+  .analysis-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:14px;margin-top:12px}
+  .box{background:#fcfdff;border:1px solid #e8eeff;border-radius:16px;padding:12px}
+  .box h4{margin:0 0 6px;color:#35509c}
+  .list{margin:0;padding-left:18px}
+  .zh-note{font-size:.9rem;color:#6d7ca5;margin-top:8px}
+  .fulltext-wrap{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start;margin-top:16px}
+  .glossary-live{position:sticky;top:16px;background:linear-gradient(180deg,#fff,#f7faff);border:1px solid #dfe8ff;border-radius:20px;padding:16px;box-shadow:0 10px 22px rgba(53,89,199,.08)}
+  .glossary-live h3{margin:0 0 10px;color:#2f4daa;font-size:1.06rem}
+  .glossary-live .term-name{font-size:1.5rem;font-weight:900;color:#c95575;line-height:1.15}
+  .glossary-live .term-phone{margin-top:6px;color:#5168a6;font-family:Georgia,serif}
+  .glossary-live .term-zh{margin-top:10px;font-size:1.05rem;font-weight:800;color:#304ea8}
+  .glossary-live .term-type{display:inline-flex;margin-top:10px;padding:5px 10px;border-radius:999px;background:#eef3ff;border:1px solid #dbe4ff;color:#4c63a6;font-size:.84rem;font-weight:800}
+  .glossary-live button{margin-top:12px;border:none;background:linear-gradient(135deg,#4563d8,#7c67ff);color:#fff;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer}
+  .glossary-help{font-size:.92rem;color:#6678aa;line-height:1.7}
+  .chapter-stack{display:grid;gap:14px}
+  details.chapter-detail{border:1px solid #dfe7ff;border-radius:22px;background:#fff;overflow:hidden}
+  details.chapter-detail > summary{cursor:pointer;list-style:none;padding:16px 18px;background:linear-gradient(180deg,#f8fbff,#f2f6ff);display:grid;gap:4px}
+  details.chapter-detail > summary::-webkit-details-marker{display:none}
+  details.chapter-detail > summary span:first-child{font-size:1.12rem;font-weight:900;color:#2947a5}
+  .summary-sub{font-size:.92rem;color:#5f73a7;font-weight:600}
+  .chapter-body{padding:18px}
+  .reading-tip{margin-bottom:14px;padding:12px 14px;border-radius:16px;background:#fff8ef;border:1px solid #f0dbc0;color:#7d6347;font-size:.92rem}
+  .reading-block{border:1px solid #e3e9ff;border-radius:18px;background:linear-gradient(180deg,#fff,#fbfcff);padding:14px 14px 12px;margin-bottom:12px}
+  .reading-head{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;margin-bottom:10px}
+  .reading-kicker{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:#edf2ff;border:1px solid #dbe4ff;color:#4f67a6;font-weight:900;font-size:.82rem}
+  .reading-title{font-weight:900;color:#2f4daa}
+  .play-para,.play-line{border:none;cursor:pointer;background:#fff;border:1px solid #dbe4ff;color:#4560a8;border-radius:10px;font-weight:800}
+  .play-para{padding:8px 12px}
+  .play-line{padding:6px 8px;min-width:42px}
+  .reading-english{display:grid;gap:8px}
+  .line-row{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;padding:8px 0;border-top:1px dashed #e9eeff}
+  .line-row:first-child{border-top:none;padding-top:0}
+  .en-line{font-family:var(--en-font);font-size:1.06rem;line-height:1.72;color:#253759}
+  .reading-chinese{margin-top:10px;padding:10px 12px;border-radius:14px;background:#f7f9ff;border:1px solid #e7edff;font-size:.86rem;line-height:1.8;color:#6b7898}
+  .gloss-term{cursor:pointer;padding:0 .22em;border-radius:.22em;font-weight:800;transition:.18s ease;display:inline}
+  .gloss-term.word{background:linear-gradient(180deg,rgba(255,212,224,.78),rgba(255,212,224,.78))}
+  .gloss-term.phrase{background:linear-gradient(180deg,rgba(196,218,255,.85),rgba(196,218,255,.85))}
+  .gloss-term.active{box-shadow:0 0 0 2px rgba(69,99,216,.18) inset}
+  .inline-pop{display:none;margin-left:.35em;padding:.18em .45em;border-radius:999px;background:#fff;border:1px solid #dce5ff;color:#35509c;font-size:.78rem;font-family:"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;vertical-align:middle}
+  .gloss-term.active .inline-pop{display:inline-flex}
+  .footer{text-align:center;color:#6174a4;font-size:.95rem;padding:8px 0 4px}
+  @media (max-width:1200px){
+    .layout{grid-template-columns:1fr}
+    .side{position:static}
+    .grid-2,.grid-3,.flow,.chain,.analysis-grid,.fulltext-wrap{grid-template-columns:1fr 1fr}
+    .glossary-live{position:static}
+  }
+  @media (max-width:780px){
+    .grid-2,.grid-3,.flow,.chain,.analysis-grid,.fulltext-wrap{grid-template-columns:1fr}
+    .step:not(:last-child)::after,.chain-item:not(:last-child)::after{display:none}
+    .reading-head{grid-template-columns:auto 1fr}
+    .play-para{grid-column:1/-1;justify-self:start}
+  }
+
+  .toc a{display:grid;gap:2px}
+  .toc-en{font-weight:900;color:#27439c;font-size:.92rem;line-height:1.3}
+  .toc-zh{font-size:.83rem;color:#6a79a1;line-height:1.35}
+  .badge,.mini,.tag,.card h3,.card p.small,.tree-head strong,.branch span,.step h3,.step li,.group-title strong,.chips span,.chain-item,.section p.lead,.sentence-card .original,.sentence-card .box,.reading-title,.subtitle,.side .live-note{position:relative}
+
+  .term-context{margin-top:10px;padding:10px 12px;border-radius:14px;background:#f7f9ff;border:1px solid #e7edff;font-size:.86rem;line-height:1.8;color:#6b7898}
+</style>
+</head>
+<body>
+<div class="app">
+<section class="panel hero">
+<h1>2.4 Cooling System 精读可视化讲义（双语互动版）</h1>
+<div class="subtitle">Automotive Engine Assembly｜直接沿用 index 模板骨架，把“系统功能、核心部件、工作流程、长难句”和“完整原文双语精读”整合到同一份 HTML 里。点击英文词汇可查看释义，英文可逐句或逐段朗读。</div>
+<div class="badge-row">
+<div class="badge">精读主题：Cooling System</div>
+<div class="badge">核心部件：Water Pump / Radiator / Thermostat</div>
+<div class="badge">核心方式：图式精读 + 原文双语 + 互动词汇</div>
+<div class="badge">书后内容：New Words + Phrases and Expressions</div>
+</div>
+</section>
+<div class="layout">
+<aside class="side">
+<section class="panel side-card">
+<h3 class="side-title">阅读路线</h3>
+<div class="toc">
+<a href="#overview"><span class="toc-en annotate-target">Overview Map</span><span class="toc-zh">本课总览图</span></a>
+<a href="#classify"><span class="toc-en annotate-target">Structure Tree</span><span class="toc-zh">冷却系统部件结构树</span></a>
+<a href="#cycle"><span class="toc-en annotate-target">Coolant Flow</span><span class="toc-zh">冷却液流动流程图</span></a>
+<a href="#compare"><span class="toc-en annotate-target">Control Table</span><span class="toc-zh">温度与压力控制表</span></a>
+<a href="#words"><span class="toc-en annotate-target">Words and Phrases</span><span class="toc-zh">词汇短语聚类图</span></a>
+<a href="#sentences"><span class="toc-en annotate-target">Sentence Parsing</span><span class="toc-zh">长难句精读卡</span></a>
+<a href="#fulltext"><span class="toc-en annotate-target">Bilingual Intensive Reading</span><span class="toc-zh">原文双语精读（手动展开）</span></a>
+</div>
+</section>
+<section class="panel side-card">
+<h3 class="side-title">朗读设置</h3>
+<div class="control-box">
+<label class="control">语音选择<select id="voiceSelect"></select></label>
+<label class="control">语速<input id="rateRange" max="1.15" min="0.75" step="0.05" type="range" value="0.9"/></label>
+</div>
+<div class="live-note">点击每句左侧的 🔊 可以朗读单句；点击“朗读本段”可以播放整段英文。</div>
+</section>
+<section class="panel side-card">
+<h3 class="side-title">精读抓手</h3>
+<div class="mini-row">
+<div class="mini">function</div><div class="mini">parts</div><div class="mini">temperature</div><div class="mini">pressure</div><div class="mini">flow</div><div class="mini">sentence parsing</div>
+</div>
+</section>
+<section class="panel side-card">
+<h3 class="side-title">课堂建议</h3>
+<div class="small">先讲“总览图”和“流程图”，再讲关键部件功能，最后展开原文逐段精读。学生先有结构，再读句子，会更容易理解 2.4 Cooling System。</div>
+</section>
+</aside>
+<main class="main">
+<section class="panel section" id="overview">
+<h2>1. 本课总览图</h2>
+<p class="lead">2.4 的核心可以先压缩成“一个目标 + 七个部件 + 两条流动路径”：目标是 keep the engine at the right temperature，部件包括 water pump、radiator、thermostat、coolant expansion tank、radiator cap、radiator fan assembly 和 coolant，两条路径分别是主冷却回路与 heating circuit。</p>
+<div class="grid-3">
+<div class="card"><h3>Function</h3><div class="tag-row"><span class="tag">regulate heat</span><span class="tag">keep temperature right</span></div><p class="small">核心问题：为什么发动机既不能太热，也不能太冷？课文首先从系统功能切入，强调 overheat、pollutants 和 wear out。</p></div>
+<div class="card"><h3>Main Parts</h3><div class="tag-row"><span class="tag">pump</span><span class="tag">radiator</span><span class="tag">thermostat</span></div><p class="small">核心问题：冷却系统由哪些关键部件组成？每个部件分别做什么？</p></div>
+<div class="card"><h3>Working Logic</h3><div class="tag-row"><span class="tag">closed thermostat</span><span class="tag">open thermostat</span></div><p class="small">核心问题：冷却液怎样在发动机、散热器和暖风回路中流动？</p></div>
+</div>
+</section>
+
+<section class="panel section" id="classify">
+<h2>2. 冷却系统部件结构树</h2>
+<p class="lead">本课最适合用“总—分”方式阅读。先抓系统功能，再把各部件按作用分成 circulation、cooling、control 和 pressure 四类。</p>
+<div class="tree">
+<div class="tree-item"><div class="tree-head"><strong>System Function</strong><span class="pill">系统功能</span></div><div class="branch"><span>regulate the amount of heat</span><span>prevent overheat</span><span>reduce pollutants</span><span>protect components</span></div></div>
+<div class="tree-item"><div class="tree-head"><strong>Circulation Parts</strong><span class="pill">循环部件</span></div><div class="branch"><span>water pump</span><span>coolant pump</span><span>coolant</span><span>engine block</span><span>cylinder head</span></div></div>
+<div class="tree-item"><div class="tree-head"><strong>Cooling Parts</strong><span class="pill">散热部件</span></div><div class="branch"><span>radiator</span><span>small tubes</span><span>radiator fan assembly</span><span>fan motor</span><span>fan shroud</span></div></div>
+<div class="tree-item"><div class="tree-head"><strong>Control Parts</strong><span class="pill">控制部件</span></div><div class="branch"><span>thermostat</span><span>predetermined temperature</span><span>warm up quickly</span></div></div>
+<div class="tree-item"><div class="tree-head"><strong>Pressure and Storage</strong><span class="pill">压力与储存</span></div><div class="branch"><span>coolant expansion tank</span><span>additional storage</span><span>radiator cap</span><span>set pressure</span><span>boiling point</span></div></div>
+</div>
+</section>
+
+<section class="panel section" id="cycle">
+<h2>3. 冷却液流动流程图</h2>
+<p class="lead">2.4 的重点不是背零散名词，而是抓住 coolant 的动作链：pump → engine block → cylinder head → thermostat → radiator / pump；另外还有一条 separate circuit 通向 heater core。</p>
+<div class="flow">
+<div class="step"><div class="step-no">Step 1</div><h3>Pump</h3><ul><li>water pump sends the fluid</li><li>coolant starts the circulation</li><li>main task: move coolant through the system</li></ul></div>
+<div class="step"><div class="step-no">Step 2</div><h3>Engine</h3><ul><li>fluid enters the engine block</li><li>moves through passages around the cylinders</li><li>returns through the cylinder head</li></ul></div>
+<div class="step"><div class="step-no">Step 3</div><h3>Thermostat</h3><ul><li>closed: back to the pump directly</li><li>open: through the radiator first</li><li>purpose: control engine temperature</li></ul></div>
+<div class="step"><div class="step-no">Step 4</div><h3>Cooling / Heating</h3><ul><li>radiator cools the hot coolant</li><li>heater core forms a separate circuit</li><li>all paths finally return to the pump</li></ul></div>
+</div>
+</section>
+
+<section class="panel section" id="compare">
+<h2>4. 温度与压力控制表</h2>
+<p class="lead">这篇说明文里有两条很重要的逻辑线：一条是 thermostat 的 open / closed 逻辑，另一条是 radiator cap 的 pressure / boiling point 逻辑。</p>
+<table class="compare">
+<thead><tr><th>对比点</th><th>Closed Thermostat</th><th>Open Thermostat</th></tr></thead>
+<tbody>
+<tr><td>冷却液路径</td><td>goes back to the pump directly</td><td>goes through the radiator first</td></tr>
+<tr><td>温度目标</td><td>allow the engine to warm up quickly</td><td>cool the hot coolant</td></tr>
+<tr><td>教学关键词</td><td>predetermined temperature / warm up</td><td>radiator / cool / return</td></tr>
+</tbody>
+</table>
+<table class="compare">
+<thead><tr><th>Part</th><th>Key Action</th><th>Result</th></tr></thead>
+<tbody>
+<tr><td>radiator cap</td><td>allows a set pressure to build in the system</td><td>increases the boiling point</td></tr>
+<tr><td>coolant expansion tank</td><td>provides additional storage</td><td>holds expanding coolant</td></tr>
+<tr><td>radiator fan assembly</td><td>helps cool hot coolant in the radiator</td><td>improves cooling effect</td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="panel section" id="words">
+<h2>5. 词汇短语聚类图</h2>
+<p class="lead">这一部分把书后 New Words、Phrases and Expressions 以及正文核心专业词汇整合成几个学习群组，便于学生分组记忆。</p>
+<div class="diagram">
+<div class="group"><div class="group-title"><strong>Function Words</strong><span class="pill">系统作用</span></div><div class="chips"><span>regulate</span><span>the amount of ...</span><span>overheat</span><span>emit</span><span>pollutant</span><span>prematurely</span><span>wear out</span><span>significant</span></div></div>
+<div class="group"><div class="group-title"><strong>Main Parts</strong><span class="pill">主要部件</span></div><div class="chips"><span>water pump</span><span>coolant</span><span>radiator</span><span>thermostat</span><span>coolant expansion tank</span><span>radiator cap</span><span>radiator fan assembly</span></div></div>
+<div class="group"><div class="group-title"><strong>Flow and Structure</strong><span class="pill">流动与结构</span></div><div class="chips"><span>circulate</span><span>tube</span><span>engine block</span><span>passage</span><span>cylinder head</span><span>heater core</span><span>separate circuit</span></div></div>
+</div>
+</section>
+
+<section class="panel section" id="sentences">
+<h2>6. 长难句精读卡</h2>
+<p class="lead">说明文精读最好做成“原句—主干—关键词—中文逻辑”四步卡片。下面挑了 2.4 中最值得精讲的三句。</p>
+<div class="sentence-card">
+<h3>句 1｜系统功能总句</h3>
+<div class="original annotate">The cooling system helps regulate the amount of heat in the engine.</div>
+<div class="analysis-grid"><div class="box"><h4>句子主干</h4><div class="en-core">The cooling system helps regulate the amount of heat in the engine.</div><div class="zh-note">冷却系统帮助调节发动机中的热量。这是全文的功能总句，后面所有部件都在服务这个目标。</div></div><div class="box"><h4>关键词提示</h4><ul class="list"><li>helps regulate 表示“帮助调节”。</li><li>the amount of heat 是固定表达，表示“热量的多少”。</li><li>engine 是整个系统服务的中心对象。</li></ul></div></div>
+</div>
+<div class="sentence-card">
+<h3>句 2｜节温器控制句</h3>
+<div class="original annotate">It blocks coolant flow to the radiator until the engine reaches a predetermined temperature, which allows the engine to warm up quickly.</div>
+<div class="analysis-grid"><div class="box"><h4>句子主干</h4><div class="en-core">It blocks coolant flow to the radiator until the engine reaches a predetermined temperature.</div><div class="zh-note">在发动机达到预设温度之前，节温器会阻止冷却液流向散热器，这样发动机才能更快升温。</div></div><div class="box"><h4>关键词提示</h4><ul class="list"><li>until 引导时间逻辑。</li><li>predetermined temperature 表示“预设温度”。</li><li>which allows... 是结果补充。</li></ul></div></div>
+</div>
+<div class="sentence-card">
+<h3>句 3｜工作过程核心句</h3>
+<div class="original annotate">The plumbing around the thermostat sends the fluid back to the pump directly if the thermostat is closed. If it is open, the fluid goes through the radiator first and then back to the pump.</div>
+<div class="analysis-grid"><div class="box"><h4>句子主干</h4><div class="en-core">closed → back to the pump directly; open → through the radiator first.</div><div class="zh-note">这两句构成 2.4 最核心的“分支流程图”，也是理解冷却系统工作逻辑的关键。</div></div><div class="box"><h4>关键词提示</h4><ul class="list"><li>if the thermostat is closed / open 是条件对比。</li><li>back to the pump directly 对应“小循环”。</li><li>through the radiator first 对应“经过散热器的大循环”。</li></ul></div></div>
+</div>
+</section>
+
+<section class="panel section" id="fulltext">
+<h2>7. 原文双语精读（手动展开）</h2>
+<p class="lead">这一部分默认保持简洁：点击章节后再看完整原文。英文在上，中文译文在下；中文字号更小；重点词汇和短语可点击查看释义与读音。</p>
+<div class="fulltext-wrap">
+<div class="chapter-stack">
+<details class="chapter-detail" id="s24a" open>
+<summary><span>2.4 Cooling System</span><span class="summary-sub">先看系统功能与学习任务，再理解“为什么发动机既不能太热，也不能太冷”。</span></summary>
+<div class="chapter-body"><div class="reading-tip">默认先看图式精读；需要逐段精讲时，再展开下面的原文双语阅读卡。英文在上，中文译文在下；中文字号更小，便于学生把注意力放在英文上。</div><div class="reading-block">
+<div class="reading-head">
+<div class="reading-kicker">01</div>
+<div class="reading-title">Warm-up</div>
+<button class="play-para" data-speak="Discuss with your partner about the following picture, and answer questions. What does the cooling system consist of? What&#x27;s the function of the cooling system?">朗读本段</button>
+</div>
+<div class="reading-english"><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="Discuss with your partner about the following picture, and answer questions.">🔊</button><div class="en-line annotate">Discuss with your partner about the following picture, and answer questions.</div></div><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="What does the cooling system consist of?">🔊</button><div class="en-line annotate">What does the cooling system consist of?</div></div><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="What&#x27;s the function of the cooling system?">🔊</button><div class="en-line annotate">What&#x27;s the function of the cooling system?</div></div></div>
+<div class="reading-chinese">和你的搭档结合图片讨论并回答问题：冷却系统由哪些部分组成？它的功能是什么？</div>
+</div><div class="reading-block">
+<div class="reading-head">
+<div class="reading-kicker">02</div>
+<div class="reading-title">2.4 Cooling System — Introduction</div>
+<button class="play-para" data-speak="The cooling system helps regulate the amount of heat in the engine. If the engine is too hot, it can overheat. If it&#x27;s too cold, the engine emits more pollutants and engine components prematurely wear out. If the cooling system fails to keep the engine at the right temperature, it can suffer significant damage and, in some cases, fail entirely.">朗读本段</button>
+</div>
+<div class="reading-english"><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="The cooling system helps regulate the amount of heat in the engine.">🔊</button><div class="en-line annotate">The cooling system helps regulate the amount of heat in the engine.</div></div><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="If the engine is too hot, it can overheat.">🔊</button><div class="en-line annotate">If the engine is too hot, it can overheat.</div></div><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="If it&#x27;s too cold, the engine emits more pollutants and engine components prematurely wear out.">🔊</button><div class="en-line annotate">If it&#x27;s too cold, the engine emits more pollutants and engine components prematurely wear out.</div></div><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="If the cooling system fails to keep the engine at the right temperature, it can suffer significant damage and, in some cases, fail entirely.">🔊</button><div class="en-line annotate">If the cooling system fails to keep the engine at the right temperature, it can suffer significant damage and, in some cases, fail entirely.</div></div></div>
+<div class="reading-chinese">冷却系统有助于调节发动机中的热量。如果发动机过热，就会发生过热故障；如果温度过低，发动机会排放更多污染物，而且零部件会过早磨损。如果冷却系统不能让发动机保持在合适温度，发动机就可能遭受严重损坏，某些情况下甚至会完全失效。</div>
+</div></div>
+</details>
+<details class="chapter-detail" id="s24b">
+<summary><span>Key Parts of the Cooling System</span><span class="summary-sub">重点理解 water pump、radiator、thermostat、expansion tank、radiator cap、fan assembly 和 coolant 的功能。</span></summary>
+<div class="chapter-body"><div class="reading-tip">这一节适合课堂边讲边指图：先问“what does it do”，再问“why is it necessary”。</div><div class="reading-block">
+<div class="reading-head">
+<div class="reading-kicker">03</div>
+<div class="reading-title">Water Pump</div>
+<button class="play-para" data-speak="The water pump, also known as the coolant pump, circulates coolant through the engine&#x27;s cooling system.">朗读本段</button>
+</div>
+<div class="reading-english"><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="The water pump, also known as the coolant pump, circulates coolant through the engine&#x27;s cooling system.">🔊</button><div class="en-line annotate">The water pump, also known as the coolant pump, circulates coolant through the engine&#x27;s cooling system.</div></div></div>
+<div class="reading-chinese">水泵，也叫冷却液泵，负责让冷却液在发动机冷却系统中循环。</div>
+</div><div class="reading-block">
+<div class="reading-head">
+<div class="reading-kicker">04</div>
+<div class="reading-title">Radiator</div>
+<button class="play-para" data-speak="The radiator receives hot coolant from the engine. As the coolant passes through the radiator&#x27;s collection of small tubes, it is cooled before returning to the engine.">朗读本段</button>
+</div>
+<div class="reading-english"><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="The radiator receives hot coolant from the engine.">🔊</button><div class="en-line annotate">The radiator receives hot coolant from the engine.</div></div><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="As the coolant passes through the radiator&#x27;s collection of small tubes, it is cooled before returning to the engine.">🔊</button><div class="en-line annotate">As the coolant passes through the radiator&#x27;s collection of small tubes, it is cooled before returning to the engine.</div></div></div>
+<div class="reading-chinese">散热器接收来自发动机的高温冷却液。冷却液流经散热器内部许多细小管道时会被冷却，然后再返回发动机。</div>
+</div><div class="reading-block">
+<div class="reading-head">
+<div class="reading-kicker">05</div>
+<div class="reading-title">Thermostat</div>
+<button class="play-para" data-speak="The thermostat is a mechanical device that controls engine temperature. It blocks coolant flow to the radiator until the engine reaches a predetermined temperature, which allows the engine to warm up quickly.">朗读本段</button>
+</div>
+<div class="reading-english"><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="The thermostat is a mechanical device that controls engine temperature.">🔊</button><div class="en-line annotate">The thermostat is a mechanical device that controls engine temperature.</div></div><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="It blocks coolant flow to the radiator until the engine reaches a predetermined temperature, which allows the engine to warm up quickly.">🔊</button><div class="en-line annotate">It blocks coolant flow to the radiator until the engine reaches a predetermined temperature, which allows the engine to warm up quickly.</div></div></div>
+<div class="reading-chinese">节温器是一种控制发动机温度的机械装置。在发动机达到预定温度之前，它会阻止冷却液流向散热器，这样有助于发动机快速暖机。</div>
+</div><div class="reading-block">
+<div class="reading-head">
+<div class="reading-kicker">06</div>
+<div class="reading-title">Coolant Expansion Tank</div>
+<button class="play-para" data-speak="As engine coolant heats up, it expands. The coolant expansion tank provides additional storage for the expanding coolant and is commonly the location where coolant is added to the engine.">朗读本段</button>
+</div>
+<div class="reading-english"><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="As engine coolant heats up, it expands.">🔊</button><div class="en-line annotate">As engine coolant heats up, it expands.</div></div><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="The coolant expansion tank provides additional storage for the expanding coolant and is commonly the location where coolant is added to the engine.">🔊</button><div class="en-line annotate">The coolant expansion tank provides additional storage for the expanding coolant and is commonly the location where coolant is added to the engine.</div></div></div>
+<div class="reading-chinese">发动机冷却液受热后会膨胀。冷却液膨胀箱为膨胀后的冷却液提供额外储存空间，而且通常也是向发动机添加冷却液的位置。</div>
+</div><div class="reading-block">
+<div class="reading-head">
+<div class="reading-kicker">07</div>
+<div class="reading-title">Radiator Cap</div>
+<button class="play-para" data-speak="The radiator cap seals the main filling point of the cooling system. It also allows a set pressure to build in the system, which increases the boiling point—and thus, the efficiency—of the cooling system.">朗读本段</button>
+</div>
+<div class="reading-english"><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="The radiator cap seals the main filling point of the cooling system.">🔊</button><div class="en-line annotate">The radiator cap seals the main filling point of the cooling system.</div></div><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="It also allows a set pressure to build in the system, which increases the boiling point—and thus, the efficiency—of the cooling system.">🔊</button><div class="en-line annotate">It also allows a set pressure to build in the system, which increases the boiling point—and thus, the efficiency—of the cooling system.</div></div></div>
+<div class="reading-chinese">散热器盖密封冷却系统的主加注口。它还允许系统内部建立一定压力，从而提高冷却液的沸点，也就提高了冷却系统的效率。</div>
+</div><div class="reading-block">
+<div class="reading-head">
+<div class="reading-kicker">08</div>
+<div class="reading-title">Radiator Fan Assembly</div>
+<button class="play-para" data-speak="The radiator fan assembly, which helps to cool the hot coolant in the radiator, is comprised of cooling fan(s), cooling fan motor(s), and a fan shroud.">朗读本段</button>
+</div>
+<div class="reading-english"><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="The radiator fan assembly, which helps to cool the hot coolant in the radiator, is comprised of cooling fan(s), cooling fan motor(s), and a fan shroud.">🔊</button><div class="en-line annotate">The radiator fan assembly, which helps to cool the hot coolant in the radiator, is comprised of cooling fan(s), cooling fan motor(s), and a fan shroud.</div></div></div>
+<div class="reading-chinese">散热器风扇总成帮助冷却散热器中的高温冷却液，它由冷却风扇、风扇电机和风扇护罩组成。</div>
+</div><div class="reading-block">
+<div class="reading-head">
+<div class="reading-kicker">09</div>
+<div class="reading-title">Coolant</div>
+<button class="play-para" data-speak="Coolant is the fluid that flows through the engine&#x27;s cooling system. Its main purpose is to transfer heat generated by the engine to the radiator so the engine doesn&#x27;t overheat.">朗读本段</button>
+</div>
+<div class="reading-english"><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="Coolant is the fluid that flows through the engine&#x27;s cooling system.">🔊</button><div class="en-line annotate">Coolant is the fluid that flows through the engine&#x27;s cooling system.</div></div><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="Its main purpose is to transfer heat generated by the engine to the radiator so the engine doesn&#x27;t overheat.">🔊</button><div class="en-line annotate">Its main purpose is to transfer heat generated by the engine to the radiator so the engine doesn&#x27;t overheat.</div></div></div>
+<div class="reading-chinese">冷却液是在发动机冷却系统中流动的液体，它的主要作用是把发动机产生的热量传递到散热器，从而防止发动机过热。</div>
+</div></div>
+</details>
+<details class="chapter-detail" id="s24c">
+<summary><span>How Cooling System Works</span><span class="summary-sub">抓住 coolant 的流动路线：pump → engine → thermostat → radiator / heater core → pump。</span></summary>
+<div class="chapter-body"><div class="reading-tip">读这部分时建议学生边看流程图边朗读，尤其要分清 thermostat closed 和 thermostat open 两种情况。</div><div class="reading-block">
+<div class="reading-head">
+<div class="reading-kicker">10</div>
+<div class="reading-title">How Cooling System Works</div>
+<button class="play-para" data-speak="The pump sends the fluid into the engine block, where it makes its way through passages in the engine around the cylinders. Then it returns through the cylinder head of the engine. The thermostat is located where the fluid leaves the engine. The plumbing around the thermostat sends the fluid back to the pump directly if the thermostat is closed. If it is open, the fluid goes through the radiator first and then back to the pump.">朗读本段</button>
+</div>
+<div class="reading-english"><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="The pump sends the fluid into the engine block, where it makes its way through passages in the engine around the cylinders.">🔊</button><div class="en-line annotate">The pump sends the fluid into the engine block, where it makes its way through passages in the engine around the cylinders.</div></div><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="Then it returns through the cylinder head of the engine.">🔊</button><div class="en-line annotate">Then it returns through the cylinder head of the engine.</div></div><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="The thermostat is located where the fluid leaves the engine.">🔊</button><div class="en-line annotate">The thermostat is located where the fluid leaves the engine.</div></div><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="The plumbing around the thermostat sends the fluid back to the pump directly if the thermostat is closed.">🔊</button><div class="en-line annotate">The plumbing around the thermostat sends the fluid back to the pump directly if the thermostat is closed.</div></div><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="If it is open, the fluid goes through the radiator first and then back to the pump.">🔊</button><div class="en-line annotate">If it is open, the fluid goes through the radiator first and then back to the pump.</div></div></div>
+<div class="reading-chinese">水泵先把冷却液送入发动机缸体，冷却液随后通过发动机内部围绕气缸的通道流动，然后经由气缸盖返回。节温器位于冷却液离开发动机的位置。如果节温器关闭，周围的管路会把冷却液直接送回水泵；如果节温器打开，冷却液会先流经散热器，然后再回到水泵。</div>
+</div><div class="reading-block">
+<div class="reading-head">
+<div class="reading-kicker">11</div>
+<div class="reading-title">Heating Circuit</div>
+<button class="play-para" data-speak="There is also a separate circuit for the heating system. This circuit takes fluid from the cylinder head and passes it through a heater core and then back to the pump.">朗读本段</button>
+</div>
+<div class="reading-english"><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="There is also a separate circuit for the heating system.">🔊</button><div class="en-line annotate">There is also a separate circuit for the heating system.</div></div><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="This circuit takes fluid from the cylinder head and passes it through a heater core and then back to the pump.">🔊</button><div class="en-line annotate">This circuit takes fluid from the cylinder head and passes it through a heater core and then back to the pump.</div></div></div>
+<div class="reading-chinese">此外，供暖系统还有一个独立回路。这个回路从气缸盖引出冷却液，让它流经暖风芯体，然后再回到水泵。</div>
+</div></div>
+</details>
+<details class="chapter-detail" id="s24d">
+<summary><span>Book Back Matter</span><span class="summary-sub">把书后 New Words 与 Phrases and Expressions 做成单独复习卡，方便课堂背诵与课后复习。</span></summary>
+<div class="chapter-body"><div class="reading-tip">书后词汇和短语可与正文对照记忆：先看英文，再回到原文中找对应句子。</div><div class="reading-block">
+<div class="reading-head">
+<div class="reading-kicker">12</div>
+<div class="reading-title">New Words</div>
+<button class="play-para" data-speak="regulate, overheat, emit, pollutant, component, prematurely, significant, coolant, circulate, radiator, receive, tube, thermostat, block, predetermined, expansion, additional, storage">朗读本段</button>
+</div>
+<div class="reading-english"><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="regulate, overheat, emit, pollutant, component, prematurely, significant, coolant, circulate, radiator, receive, tube, thermostat, block, predetermined, expansion, additional, storage">🔊</button><div class="en-line annotate">regulate, overheat, emit, pollutant, component, prematurely, significant, coolant, circulate, radiator, receive, tube, thermostat, block, predetermined, expansion, additional, storage</div></div></div>
+<div class="reading-chinese">书后 New Words 包括：regulate，overheat，emit，pollutant，component，prematurely，significant，coolant，circulate，radiator，receive，tube，thermostat，block，predetermined，expansion，additional，storage。</div>
+</div><div class="reading-block">
+<div class="reading-head">
+<div class="reading-kicker">13</div>
+<div class="reading-title">Phrases and Expressions</div>
+<button class="play-para" data-speak="cooling system, the amount of ..., wear out, water pump, warm up, radiator cap">朗读本段</button>
+</div>
+<div class="reading-english"><div class="line-row"><button aria-label="朗读本句" class="play-line" data-speak="cooling system, the amount of ..., wear out, water pump, warm up, radiator cap">🔊</button><div class="en-line annotate">cooling system, the amount of ..., wear out, water pump, warm up, radiator cap</div></div></div>
+<div class="reading-chinese">书后短语包括：cooling system，the amount of ...，wear out，water pump，warm up，radiator cap。</div>
+</div></div>
+</details>
+</div>
+<aside class="glossary-live" id="glossaryLive">
+<h3>词汇注释卡</h3>
+<div class="glossary-help">现在页面里的英文词汇、短语和正文中的普通单词都可以点击。点击后，这里会显示中文释义、音标和朗读按钮；暂未单独收录的词，会给出句中参考。</div>
+<div class="term-name" id="liveTerm">cooling system</div>
+<div class="term-phone" id="livePhone">暂无音标，点击下方按钮可听英文朗读</div>
+<div class="term-zh" id="liveZh">冷却系统</div>
+<div class="term-type" id="liveType">重点短语</div>
+<button data-speak="cooling system" id="liveSpeak">朗读当前词条</button>
+<div class="term-context" id="liveContext">已显示该词或短语的中文释义。</div>
+</aside>
+</div>
+</section>
+<div class="footer">© 2026 昆玉职业技术学院 基础教学部 李巧 · 2.4 Cooling System 双语互动精读版</div>
+</main>
+</div>
+</div>
+<script>
+const GLOSSARY = {"cooling system": {"zh": "冷却系统", "phonetic": "", "type": "phrase"}, "regulate": {"zh": "调节；调整", "phonetic": "/ˈreɡjuleɪt/", "type": "word"}, "amount": {"zh": "数量；总量", "phonetic": "/əˈmaʊnt/", "type": "word"}, "heat": {"zh": "热量", "phonetic": "/hiːt/", "type": "word"}, "engine": {"zh": "发动机", "phonetic": "/ˈendʒɪn/", "type": "word"}, "overheat": {"zh": "过热", "phonetic": "/ˌoʊvərˈhiːt/", "type": "word"}, "emit": {"zh": "发出；排放", "phonetic": "/ɪˈmɪt/", "type": "word"}, "pollutant": {"zh": "污染物", "phonetic": "/pəˈluːtənt/", "type": "word"}, "component": {"zh": "部件；零件", "phonetic": "/kəmˈpoʊnənt/", "type": "word"}, "prematurely": {"zh": "过早地", "phonetic": "/ˌpriːməˈtʃʊrli/", "type": "word"}, "significant": {"zh": "显著的；重大的", "phonetic": "/sɪɡˈnɪfɪkənt/", "type": "word"}, "water pump": {"zh": "水泵", "phonetic": "", "type": "phrase"}, "coolant pump": {"zh": "冷却液泵", "phonetic": "", "type": "phrase"}, "coolant": {"zh": "冷却液", "phonetic": "/ˈkuːlənt/", "type": "word"}, "circulate": {"zh": "循环；使循环", "phonetic": "/ˈsɜːrkjəleɪt/", "type": "word"}, "radiator": {"zh": "散热器", "phonetic": "/ˈreɪdieɪtər/", "type": "word"}, "receive": {"zh": "接收", "phonetic": "/rɪˈsiːv/", "type": "word"}, "tube": {"zh": "管；小管", "phonetic": "/tuːb/", "type": "word"}, "thermostat": {"zh": "节温器", "phonetic": "/ˈθɜːrməstæt/", "type": "word"}, "mechanical device": {"zh": "机械装置", "phonetic": "", "type": "phrase"}, "block": {"zh": "阻止；阻塞", "phonetic": "/blɑːk/", "type": "word"}, "predetermined": {"zh": "预先设定的", "phonetic": "/ˌpriːdɪˈtɜːrmɪnd/", "type": "word"}, "warm up": {"zh": "升温；暖机", "phonetic": "", "type": "phrase"}, "coolant expansion tank": {"zh": "冷却液膨胀箱", "phonetic": "", "type": "phrase"}, "expansion": {"zh": "膨胀", "phonetic": "/ɪkˈspænʃən/", "type": "word"}, "additional": {"zh": "额外的", "phonetic": "/əˈdɪʃənl/", "type": "word"}, "storage": {"zh": "储存；储藏", "phonetic": "/ˈstɔːrɪdʒ/", "type": "word"}, "radiator cap": {"zh": "散热器盖；水箱盖", "phonetic": "", "type": "phrase"}, "seal": {"zh": "密封", "phonetic": "/siːl/", "type": "word"}, "pressure": {"zh": "压力", "phonetic": "/ˈpreʃər/", "type": "word"}, "boiling point": {"zh": "沸点", "phonetic": "", "type": "phrase"}, "efficiency": {"zh": "效率", "phonetic": "/ɪˈfɪʃənsi/", "type": "word"}, "radiator fan assembly": {"zh": "散热器风扇总成", "phonetic": "", "type": "phrase"}, "fan motor": {"zh": "风扇电机", "phonetic": "", "type": "phrase"}, "fan shroud": {"zh": "风扇护罩", "phonetic": "", "type": "phrase"}, "fluid": {"zh": "液体", "phonetic": "/ˈfluːɪd/", "type": "word"}, "transfer": {"zh": "传递；传输", "phonetic": "/trænsˈfɜːr/", "type": "word"}, "generated": {"zh": "产生的", "phonetic": "/ˈdʒenəreɪtɪd/", "type": "word"}, "engine block": {"zh": "发动机缸体", "phonetic": "", "type": "phrase"}, "passage": {"zh": "通道", "phonetic": "/ˈpæsɪdʒ/", "type": "word"}, "cylinders": {"zh": "气缸（复）", "phonetic": "/ˈsɪlɪndərz/", "type": "word"}, "cylinder": {"zh": "气缸", "phonetic": "/ˈsɪlɪndər/", "type": "word"}, "cylinder head": {"zh": "气缸盖", "phonetic": "", "type": "phrase"}, "plumbing": {"zh": "管路系统", "phonetic": "/ˈplʌmɪŋ/", "type": "word"}, "directly": {"zh": "直接地", "phonetic": "/dəˈrektli/", "type": "word"}, "separate circuit": {"zh": "独立回路", "phonetic": "", "type": "phrase"}, "heating system": {"zh": "供暖系统", "phonetic": "", "type": "phrase"}, "heater core": {"zh": "暖风芯体", "phonetic": "", "type": "phrase"}, "the amount of": {"zh": "……的数量", "phonetic": "", "type": "phrase"}, "wear out": {"zh": "磨损；耗尽", "phonetic": "", "type": "phrase"}, "consist of": {"zh": "由……组成", "phonetic": "", "type": "phrase"}, "function": {"zh": "功能", "phonetic": "/ˈfʌŋkʃən/", "type": "word"}};
+const DISPLAY_NAMES = {'word':'重点词汇','phrase':'重点短语','auto-word':'普通单词','contextual':'句中参考'};
+const BASIC_WORDS = {"overview": "总览", "map": "路线图", "parts": "部件", "flow": "流程", "table": "表格", "reading": "阅读", "bilingual": "双语的", "intensive": "精读的", "system": "系统", "temperature": "温度", "engineer": "工程师", "work": "工作", "logic": "逻辑", "pump": "泵", "radiator": "散热器", "cap": "盖", "hot": "热的", "cold": "冷的", "closed": "关闭的", "open": "打开的", "return": "返回", "through": "通过", "main": "主要的", "purpose": "目的"};
+function escapeRegExp(str) { return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+function termPattern(term) { const escaped = escapeRegExp(term); return new RegExp(`(^|[^A-Za-z0-9-])(${escaped})(?=$|[^A-Za-z0-9-])`, 'i'); }
+const sortedTerms = Object.keys(GLOSSARY).sort((a,b)=> b.length - a.length);
+const termPatterns = sortedTerms.map(term => [term, termPattern(term)]);
+const WORD_TOKEN_RE = /([A-Za-z]+(?:-[A-Za-z]+)?(?:'[A-Za-z]+)?)/g;
+function normalizeWord(raw) { return String(raw || '').toLowerCase().replace(/^['"]+|['".,;:!?()\[\]{}]+$/g, '').replace(/’/g, "'").trim(); }
+function buildCandidates(raw) {
+  const base = normalizeWord(raw); const list = []; const add = v => { if(v && !list.includes(v)) list.push(v); };
+  add(base); add(base.replace(/'s$/, '')); add(base.replace(/s'$/, 's')); if (base.endsWith('ies')) add(base.slice(0,-3) + 'y');
+  if (base.endsWith('es')) { add(base.slice(0,-2)); add(base.slice(0,-1)); } if (base.endsWith('s')) add(base.slice(0,-1));
+  if (base.endsWith('ing')) { add(base.slice(0,-3)); add(base.slice(0,-3) + 'e'); } if (base.endsWith('ed')) { add(base.slice(0,-2)); add(base.slice(0,-1)); add(base.slice(0,-2) + 'e'); }
+  if (base.endsWith('ly')) add(base.slice(0,-2)); if (base.includes('-')) { add(base.replace(/-/g,' ')); const parts = base.split('-'); if(parts.length===2){add(parts[0]);add(parts[1]);} }
+  return list.filter(Boolean);
+}
+function lookupTerm(raw) { const candidates = buildCandidates(raw); for (const key of candidates) { if (GLOSSARY[key]) return { key, info:GLOSSARY[key], source:'glossary' }; } for (const key of candidates) { if (BASIC_WORDS[key]) return { key, info:{ zh:BASIC_WORDS[key], phonetic:'', type:'auto-word' }, source:'basic' }; } return null; }
+function annotateText(text) {
+  let segments = [text];
+  for (const [term, regex] of termPatterns) {
+    const entry = GLOSSARY[term]; const klass = entry.type === 'phrase' ? 'phrase' : 'word'; const next = [];
+    for (const seg of segments) {
+      if (typeof seg !== 'string') { next.push(seg); continue; }
+      let remaining = seg;
+      while (remaining) {
+        const match = regex.exec(remaining);
+        if (!match) { next.push(remaining); break; }
+        const lead = match[1] || ''; const matched = match[2]; const idx = match.index; const before = remaining.slice(0, idx) + lead;
+        if (before) next.push(before); next.push({term, text:matched, klass, pop:GLOSSARY[term].zh}); remaining = remaining.slice(idx + match[0].length);
+      }
+    }
+    segments = next;
+  }
+  const finalSegs = [];
+  for (const seg of segments) {
+    if (typeof seg !== 'string') { finalSegs.push(seg); continue; }
+    let last = 0;
+    seg.replace(WORD_TOKEN_RE, (m, word, offset) => {
+      if (offset > last) finalSegs.push(seg.slice(last, offset));
+      const found = lookupTerm(word);
+      finalSegs.push({ term: found ? found.key : normalizeWord(word), text:word, klass: found ? (found.info.type === 'phrase' ? 'phrase' : (found.info.type || 'auto-word')) : 'auto-word', pop: found ? found.info.zh : '' });
+      last = offset + word.length; return m;
+    });
+    if (last < seg.length) finalSegs.push(seg.slice(last));
+  }
+  return finalSegs;
+}
+function nearestContextZh(node) { const reading = node.closest('.reading-block'); if (reading) { const zh = reading.querySelector('.reading-chinese'); if (zh) return zh.textContent.trim(); } const box = node.closest('.sentence-card,.card,.step,.group,.chain-item,.tree-item,.section,.badge,.mini,.tag'); if (box) { const zh = box.querySelector('.zh-note,.toc-zh,.small,.reading-chinese'); if (zh) return zh.textContent.trim(); } return ''; }
+function annotateNode(node) { if (!node) return; const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, { acceptNode(textNode) { const parent = textNode.parentElement; if (!parent) return NodeFilter.FILTER_REJECT; if (parent.closest('script,style,button,.gloss-term,.reading-chinese,.toc-zh,.term-name,.term-phone,.term-zh,.term-type,.term-context')) return NodeFilter.FILTER_REJECT; if (!/[A-Za-z]/.test(textNode.nodeValue)) return NodeFilter.FILTER_REJECT; return NodeFilter.FILTER_ACCEPT; } }); const targets = []; while (walker.nextNode()) targets.push(walker.currentNode); targets.forEach(textNode => { const parts = annotateText(textNode.nodeValue); if (parts.every(part => typeof part === 'string')) return; const frag = document.createDocumentFragment(); const contextZh = nearestContextZh(textNode.parentElement || node); parts.forEach(part => { if (typeof part === 'string') frag.appendChild(document.createTextNode(part)); else { const span = document.createElement('span'); span.className = `gloss-term ${part.klass === 'auto-word' ? 'auto-word' : part.klass}`; span.dataset.key = part.term; span.dataset.display = part.text; span.dataset.context = contextZh || ''; span.textContent = part.text; if (part.pop && part.klass !== 'auto-word') { const pop = document.createElement('span'); pop.className = 'inline-pop'; pop.textContent = part.pop; span.appendChild(pop); } frag.appendChild(span); } }); textNode.parentNode.replaceChild(frag, textNode); }); }
+['.toc-en','.subtitle','.badge','.mini','.tag','.section h2','.section p.lead','.card','.tree-item','.step','.group','.chain-item','.sentence-card','.reading-title','.en-line','.term-name'].forEach(sel => document.querySelectorAll(sel).forEach(el => annotateNode(el)));
+const liveTerm = document.getElementById('liveTerm'); const livePhone = document.getElementById('livePhone'); const liveZh = document.getElementById('liveZh'); const liveType = document.getElementById('liveType'); const liveSpeak = document.getElementById('liveSpeak'); const liveContext = document.getElementById('liveContext');
+function updateGlossaryCard(rawTerm, displayText, contextZh='') { const found = lookupTerm(rawTerm) || lookupTerm(displayText) || lookupTerm((displayText||'').replace(/'s$/,'')); const shown = displayText || rawTerm; if (liveTerm) liveTerm.textContent = shown; if (liveSpeak) liveSpeak.dataset.speak = shown; if (found) { if (livePhone) livePhone.textContent = found.info.phonetic || '暂无音标，点击下方按钮可听英文朗读'; if (liveZh) liveZh.textContent = found.info.zh; if (liveType) liveType.textContent = DISPLAY_NAMES[found.info.type] || '普通单词'; if (liveContext) liveContext.textContent = contextZh ? `句中参考：${contextZh}` : '已显示该词或短语的中文释义。'; } else { if (livePhone) livePhone.textContent = '暂无音标，点击下方按钮可听英文朗读'; if (liveZh) liveZh.textContent = contextZh ? '本词未单独收录，建议结合句中翻译理解。' : '本词暂未单独收录，可继续扩充词库。'; if (liveType) liveType.textContent = DISPLAY_NAMES['contextual']; if (liveContext) liveContext.textContent = contextZh ? `句中参考：${contextZh}` : '当前没有可用的句中参考。'; } }
+document.addEventListener('click', (e) => { const termNode = e.target.closest('.gloss-term'); if (termNode) { document.querySelectorAll('.gloss-term.active').forEach(n => n.classList.remove('active')); termNode.classList.add('active'); updateGlossaryCard(termNode.dataset.key || termNode.dataset.display, termNode.dataset.display || termNode.textContent.trim(), termNode.dataset.context || ''); return; } const btn = e.target.closest('[data-speak]'); if (btn) speakText(btn.dataset.speak); });
+function speakText(text) { const synth = window.speechSynthesis; if (!synth || !text) return; synth.cancel(); const utter = new SpeechSynthesisUtterance(text); utter.lang = 'en-US'; const voiceSelect = document.getElementById('voiceSelect'); const rateRange = document.getElementById('rateRange'); utter.rate = parseFloat((rateRange && rateRange.value) || '0.9'); const selectedVoiceName = voiceSelect ? voiceSelect.value : ''; const voices = synth.getVoices(); const chosen = voices.find(v => v.name === selectedVoiceName); if (chosen) utter.voice = chosen; synth.speak(utter); }
+const voiceSelect = document.getElementById('voiceSelect'); function loadVoices() { if (!voiceSelect || !('speechSynthesis' in window)) return; const voices = speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang)); voiceSelect.innerHTML = ''; if (!voices.length) { const op = document.createElement('option'); op.textContent = '浏览器默认英文语音'; op.value = ''; voiceSelect.appendChild(op); return; } voices.forEach((v, i) => { const op = document.createElement('option'); op.value = v.name; op.textContent = `${v.name} (${v.lang})`; if (i === 0) op.selected = true; voiceSelect.appendChild(op); }); }
+loadVoices(); if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = loadVoices; updateGlossaryCard('cooling system','cooling system');
+</script>
+</body>
+</html>
